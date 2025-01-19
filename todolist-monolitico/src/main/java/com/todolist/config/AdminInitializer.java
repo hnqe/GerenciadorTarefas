@@ -2,15 +2,17 @@ package com.todolist.config;
 
 import com.todolist.model.User;
 import com.todolist.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class AdminInitializer implements CommandLineRunner {
 
     private final UserService userService;
+
+    public AdminInitializer(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public void run(String... args) throws Exception {

@@ -2,8 +2,6 @@ package com.todolist.controller;
 
 import com.todolist.model.Task;
 import com.todolist.service.TaskService;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,15 +46,20 @@ public class HomeController {
     }
 
     // Classe para mapear a resposta da API FavQs
-    @Getter
-    @Setter
     static class FavQuoteResponse {
         private Quote quote;
 
-        @Getter
-        @Setter
         static class Quote {
             private String body;
+
+            public String getBody() {
+                return body;
+            }
+
+        }
+
+        public Quote getQuote() {
+            return quote;
         }
     }
 }

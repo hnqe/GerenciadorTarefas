@@ -2,15 +2,11 @@ package com.todolist.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
 public class User {
 
     @Id
@@ -27,4 +23,32 @@ public class User {
     @NotBlank
     @Column(name = "role")
     private String role; // Ex: "ROLE_USER", "ROLE_ADMIN"
+
+    public UUID getId() {
+        return id;
+    }
+
+    public @NotBlank String getUsername() {
+        return username;
+    }
+
+    public void setUsername(@NotBlank String username) {
+        this.username = username;
+    }
+
+    public @NotBlank String getPassword() {
+        return password;
+    }
+
+    public void setPassword(@NotBlank String password) {
+        this.password = password;
+    }
+
+    public @NotBlank String getRole() {
+        return role;
+    }
+
+    public void setRole(@NotBlank String role) {
+        this.role = role;
+    }
 }

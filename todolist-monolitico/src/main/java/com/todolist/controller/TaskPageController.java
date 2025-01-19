@@ -4,7 +4,6 @@ import com.todolist.model.Task;
 import com.todolist.service.TaskService;
 import com.todolist.service.UserService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,12 +12,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("tasks")
 public class TaskPageController {
 
     private final TaskService taskService;
     private final UserService userService;
+
+    public TaskPageController(TaskService taskService, UserService userService) {
+        this.taskService = taskService;
+        this.userService = userService;
+    }
 
     // Página inicial de tarefas
     @GetMapping

@@ -1,0 +1,42 @@
+/* src/index.css */
+
+/* Reinicialização ou estilos globais */
+body {
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Classes específicas para telas de auth, etc. */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.auth-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Estilo de .task-pendente, etc. */
+.task-pendente {
+  background-color: #fff3cd;
+  border-left: 5px solid #ffc107;
+}
+
+.task-em_andamento {
+  background-color: #d1ecf1;
+  border-left: 5px solid #17a2b8;
+}
+
+.task-concluido {
+  background-color: #d4edda;
+  border-left: 5px solid #28a745;
+}

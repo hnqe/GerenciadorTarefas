@@ -1,8 +1,5 @@
 package com.todolist.model;
 
-import lombok.Getter;
-
-@Getter
 public enum TaskStatus {
     PENDENTE("Pendente"),
     EM_ANDAMENTO("Em Andamento"),
