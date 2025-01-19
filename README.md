@@ -106,13 +106,9 @@ Para evoluir o projeto, dividimos a aplicação em três grandes partes:
    - Restringe acessos via token JWT fornecido pelo Auth-Service.
    - Possui integração com o Postgres para persistência das tarefas.
    - Retorna dados em formato JSON para ser consumido por qualquer frontend.
-   - Integração externa: também é responsável por buscar citações na API FavQs para exibição na página inicial.
-  
-  ##### API Externa Integrada
-    A aplicação utiliza a API pública FavQs para obter citações motivacionais, exibidas na página inicial do usuário autenticado.
-
-    Endpoint consumido: GET /qotd (quote of the day).
-    A integração é realizada no backend por meio de Spring WebClient, e o conteúdo é retornado para o frontend.
+   - Integração externa: também é responsável por buscar citações na API FavQs para exibição na página inicial. A aplicação utiliza a API pública FavQs para obter citações motivacionais, exibidas na página inicial do usuário autenticado.
+   Endpoint consumido: GET /qotd (quote of the day).
+   A integração é realizada no backend por meio de Spring WebClient, e o conteúdo é retornado para o frontend.
 
 3. **Frontend (React)**:
    - Responsável pela interface do usuário.
@@ -153,6 +149,7 @@ A seguir, descrevemos passo a passo para rodar cada um dos serviços separadamen
 3. Passos para execução
    - Clonar/baixar o projeto do auth-service.
    - No diretório do auth-service, rodar:
+
      ```properties
      mvn clean install
      mvn spring-boot:run
@@ -189,6 +186,7 @@ A seguir, descrevemos passo a passo para rodar cada um dos serviços separadamen
 3. Passos para execução
    - Clonar/baixar o projeto do task-service.
    - No diretório do task-service, rodar:
+
      ```properties
      mvn clean install
      mvn spring-boot:run
@@ -223,7 +221,7 @@ A seguir, descrevemos passo a passo para rodar cada um dos serviços separadamen
    npm start
    ```
 
- Por padrão, estará em http://localhost:3000.
+   Por padrão, estará em http://localhost:3000.
 
 5. Fluxo 
   - Abra o navegador em http://localhost:3000.
@@ -232,7 +230,9 @@ A seguir, descrevemos passo a passo para rodar cada um dos serviços separadamen
   - Clique em “Go to Tasks” para abrir o kanban (Pendente, In Progress, Done).
   - Se logar com o usuário admin (senha admin123), verá um botão “Admin” no Header que acessa /admin-dashboard.
 
-### 6 Como Funciona a Comunicação
+---
+
+### 6. Como Funciona a Comunicação
 
 - O Frontend obtém token JWT no Auth-Service (http://localhost:8080).
 - O token é armazenado no localStorage.
@@ -240,14 +240,18 @@ A seguir, descrevemos passo a passo para rodar cada um dos serviços separadamen
 - O Task-Service, ao receber, valida o token localmente (decodifica JWT) e opcionalmente chama GET /api/auth/validate-token - no Auth-Service para confirmar se está válido.
 - Se for válido, libera o acesso.
 
-### 7 Configuração Geral e Observações
+---
+
+### 7. Configuração Geral e Observações
 
 - Cada serviço (Auth-Service e Task-Service) possui seu próprio banco e configurações.
 - Para rodar localmente, garanta que PostgreSQL esteja rodando e cada DB (auth_service, task_service) esteja criado.
 - Lembre-se de usar Java 17 (ou superior) para compatibilidade com o Spring Boot 3.x.
 - Caso deseje personalizar portas ou URLs, altere em application.properties e no frontend correspondente.
 
-### 8 Como Testar o Fluxo Completo
+---
+
+### 8. Como Testar o Fluxo Completo
 
 1. Inicie o Auth-Service (mvn spring-boot:run na pasta do auth-service).
 2. Inicie o Task-Service (mvn spring-boot:run na pasta do task-service).
@@ -259,7 +263,9 @@ A seguir, descrevemos passo a passo para rodar cada um dos serviços separadamen
 8. Vá para Tasks => kanban onde pode criar, arrastar (drag & drop) e editar tarefas.
 9. Se estiver logado como admin, verá o botão “Admin” => /admin-dashboard (que chama http://localhost:8080/admin/dashboard).
 
-### 9 Conclusão
+---
+
+### 9. Conclusão
 
 Este projeto demonstra:
 
