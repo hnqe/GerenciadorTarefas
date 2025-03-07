@@ -30,4 +30,5 @@ public class AdminInitializer implements CommandLineRunner {
             System.out.println("Admin user already exists.");
         }
     }
+
 }

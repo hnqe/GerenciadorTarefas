@@ -1,4 +1,4 @@
-package com.topicosavancados.auth_service.config;
+package com.topicosavancados.auth_service.dto;
 
 public class JwtResponse {
     private String token;
@@ -14,4 +14,5 @@ public class JwtResponse {
     public void setToken(String token) {
         this.token = token;
     }
+
 }

@@ -49,4 +49,5 @@ public class JwtTokenProvider {
             throw new RuntimeException("Invalid JWT token: " + e.getMessage(), e);
         }
     }
+
 }

@@ -8,7 +8,6 @@ const api = axios.create({
   api.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem("jwt");
-      console.log("Adding token to request headers:", token); // Verificar token no cabeçalho
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }

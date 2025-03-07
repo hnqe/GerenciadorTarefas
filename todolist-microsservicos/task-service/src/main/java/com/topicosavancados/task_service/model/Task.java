@@ -47,7 +47,6 @@ public class Task {
         this.userId = userId;
     }
 
-    // Getters e Setters
     public UUID getId() {
         return id;
     }

@@ -1,7 +1,7 @@
 package com.topicosavancados.auth_service.controller;
 
-import com.topicosavancados.auth_service.config.AuthRequest;
-import com.topicosavancados.auth_service.config.JwtResponse;
+import com.topicosavancados.auth_service.dto.AuthRequest;
+import com.topicosavancados.auth_service.dto.JwtResponse;
 import com.topicosavancados.auth_service.model.User;
 import com.topicosavancados.auth_service.service.AuthService;
 import com.topicosavancados.auth_service.service.UserService;

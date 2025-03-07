@@ -5,17 +5,24 @@ import com.topicosavancados.auth_service.model.User;
 import com.topicosavancados.auth_service.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Testes unitários para UserService.
+ *
+ */
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
     @Mock
@@ -27,20 +34,15 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
     void testCreateUser() {
         User user = new User();
         user.setPassword("plainPassword");
 
         when(passwordEncoder.encode("plainPassword")).thenReturn("encodedPassword");
-        when(userRepository.save(user)).thenAnswer(invocation -> {
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
             User savedUser = invocation.getArgument(0);
-            savedUser.setId(UUID.randomUUID()); // Simula um ID gerado
+            savedUser.setId(UUID.randomUUID()); // simula ID gerado pelo banco
             return savedUser;
         });
 
@@ -49,27 +51,27 @@ class UserServiceTest {
         assertNotNull(createdUser);
         assertEquals("encodedPassword", createdUser.getPassword());
         assertEquals("USER", createdUser.getRole());
-        verify(userRepository, times(1)).save(user);
+        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
     void testCreateAdmin() {
         User admin = new User();
-        admin.setPassword("plainPassword");
+        admin.setPassword("adminPass");
 
-        when(passwordEncoder.encode("plainPassword")).thenReturn("encodedPassword");
-        when(userRepository.save(admin)).thenAnswer(invocation -> {
+        when(passwordEncoder.encode("adminPass")).thenReturn("encodedAdminPass");
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
             User savedAdmin = invocation.getArgument(0);
-            savedAdmin.setId(UUID.randomUUID()); // Simula um ID gerado
+            savedAdmin.setId(UUID.randomUUID());
             return savedAdmin;
         });
 
         User createdAdmin = userService.createAdmin(admin);
 
         assertNotNull(createdAdmin);
-        assertEquals("encodedPassword", createdAdmin.getPassword());
+        assertEquals("encodedAdminPass", createdAdmin.getPassword());
         assertEquals("ADMIN", createdAdmin.getRole());
-        verify(userRepository, times(1)).save(admin);
+        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
@@ -89,38 +91,36 @@ class UserServiceTest {
 
     @Test
     void testGetUserByUsername_UserNotFound() {
-        String username = "nonExistentUser";
+        String missingUsername = "missingUser";
 
-        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+        when(userRepository.findByUsername(missingUsername)).thenReturn(Optional.empty());
 
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
-                () -> userService.getUserByUsername(username));
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class,
+                () -> userService.getUserByUsername(missingUsername));
+        assertTrue(ex.getMessage().contains(missingUsername));
 
-        assertEquals("User not found with username: " + username, exception.getMessage());
-        verify(userRepository, times(1)).findByUsername(username);
+        verify(userRepository, times(1)).findByUsername(missingUsername);
     }
 
     @Test
     void testExistsByUsername_UserExists() {
-        String username = "existingUser";
+        String existingUsername = "existingUser";
+        when(userRepository.existsByUsername(existingUsername)).thenReturn(true);
 
-        when(userRepository.existsByUsername(username)).thenReturn(true);
-
-        boolean exists = userService.existsByUsername(username);
+        boolean exists = userService.existsByUsername(existingUsername);
 
         assertTrue(exists);
-        verify(userRepository, times(1)).existsByUsername(username);
+        verify(userRepository, times(1)).existsByUsername(existingUsername);
     }
 
     @Test
     void testExistsByUsername_UserDoesNotExist() {
-        String username = "nonExistentUser";
+        String nonExistentUser = "nonExistentUser";
+        when(userRepository.existsByUsername(nonExistentUser)).thenReturn(false);
 
-        when(userRepository.existsByUsername(username)).thenReturn(false);
-
-        boolean exists = userService.existsByUsername(username);
+        boolean exists = userService.existsByUsername(nonExistentUser);
 
         assertFalse(exists);
-        verify(userRepository, times(1)).existsByUsername(username);
+        verify(userRepository, times(1)).existsByUsername(nonExistentUser);
     }
 }

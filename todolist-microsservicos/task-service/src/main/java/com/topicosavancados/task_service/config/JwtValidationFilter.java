@@ -99,10 +99,10 @@ public class JwtValidationFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             return authorizationHeader.substring(7);
         }
-        return null; // Apenas aceita token no cabeçalho
+        return null;
     }
 
-    private Claims extractClaimsFromToken(String token) {
+    protected Claims extractClaimsFromToken(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
@@ -119,7 +119,7 @@ public class JwtValidationFilter extends OncePerRequestFilter {
      * Opcional: Validar token consultando o AuthService
      * (Ex.: GET /api/auth/validate-token?token=xxx)
      */
-    private Boolean validateTokenWithAuthService(String token) {
+    protected Boolean validateTokenWithAuthService(String token) {
         try {
             // Chamada ao AuthService para confirmar que o token não foi revogado etc.
             Boolean isValid = webClient.get()
@@ -137,4 +137,5 @@ public class JwtValidationFilter extends OncePerRequestFilter {
             return false;
         }
     }
+
 }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,26 +33,14 @@ public class HomeController {
         }
 
         String username = authentication.getName();
-        Collection<? extends GrantedAuthority> rolesA = authentication.getAuthorities();
-        // Tenta buscar a quote
-        String idea;
-        try {
-            idea = webClient.get()
-                    .uri("/qotd")
-                    .retrieve()
-                    .bodyToMono(FavQuoteResponse.class)
-                    .map(response -> response.getQuote().getBody())
-                    .block();
-        } catch (Exception e) {
-            System.err.println("Error fetching idea: " + e.getMessage());
-            idea = "Failed to load ideas. Please try again later.";
-        }
+
+        // Ao invés de toda a lógica inline do webClient, chamamos o método auxiliar:
+        String idea = fetchQuoteFromFavQs();
 
         // Verifica se o usuário tem ROLE_ADMIN
         List<String> roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
-
         String role = roles.contains("ROLE_ADMIN") ? "ADMIN" : "USER";
 
         Map<String, Object> response = new HashMap<>();
@@ -73,20 +60,42 @@ public class HomeController {
         return taskService.getTasksByDueDate(username, LocalDate.now());
     }
 
+    /**
+     * Método protegido para buscar a quote no FavQs.
+     */
+    protected String fetchQuoteFromFavQs() {
+        try {
+            return webClient.get()
+                    .uri("/qotd")
+                    .retrieve()
+                    .bodyToMono(FavQuoteResponse.class)
+                    .map(response -> response.getQuote().getBody())
+                    .block();
+        } catch (Exception e) {
+            System.err.println("Error fetching idea: " + e.getMessage());
+            return "Failed to load ideas. Please try again later.";
+        }
+    }
 
     static class FavQuoteResponse {
         private Quote quote;
-
         static class Quote {
             private String body;
-
             public String getBody() {
                 return body;
             }
-        }
 
+            public void setBody(String body) {
+                this.body = body;
+            }
+        }
         public Quote getQuote() {
             return quote;
         }
+
+        public void setQuote(Quote quote) {
+            this.quote = quote;
+        }
     }
+
 }
