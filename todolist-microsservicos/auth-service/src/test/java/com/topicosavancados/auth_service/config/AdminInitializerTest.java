@@ -2,6 +2,7 @@ package com.topicosavancados.auth_service.config;
 
 import com.topicosavancados.auth_service.model.User;
 import com.topicosavancados.auth_service.service.UserService;
+import com.topicosavancados.auth_service.config.AdminInitializer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

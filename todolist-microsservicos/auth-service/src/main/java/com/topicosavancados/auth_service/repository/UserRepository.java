@@ -11,5 +11,8 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username); // Atualizado para retornar Optional
     boolean existsByUsername(String username);     // Para verificar se o usuário já existe
+    
+    // Admin methods
+    long countByRole(String role);
 }
 

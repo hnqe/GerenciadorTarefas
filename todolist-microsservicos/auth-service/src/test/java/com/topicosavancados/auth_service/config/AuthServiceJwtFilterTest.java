@@ -1,5 +1,7 @@
 package com.topicosavancados.auth_service.config;
 
+import com.topicosavancados.auth_service.config.JwtTokenProvider;
+import com.topicosavancados.auth_service.config.AuthServiceJwtFilter;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,6 +39,8 @@ class AuthServiceJwtFilterTest {
         authServiceJwtFilter = new AuthServiceJwtFilter(jwtTokenProvider);
         // Limpa o contexto de segurança antes de cada teste
         SecurityContextHolder.clearContext();
+        // Mock do requestURI para evitar NullPointerException
+        when(request.getRequestURI()).thenReturn("/api/test");
     }
 
     @Test
@@ -93,6 +97,32 @@ class AuthServiceJwtFilterTest {
         // Verifica que o SecurityContext foi limpo
         assertNull(SecurityContextHolder.getContext().getAuthentication());
         verify(filterChain, times(1)).doFilter(request, response);
+    }
+
+    @Test
+    void doFilterInternal_withPublicEndpoint() throws Exception {
+        // Testa endpoint público (login)
+        when(request.getRequestURI()).thenReturn("/api/auth/login");
+
+        authServiceJwtFilter.doFilterInternal(request, response, filterChain);
+
+        // Verifica que passou direto sem tentar validar JWT
+        verify(filterChain, times(1)).doFilter(request, response);
+        verify(jwtTokenProvider, never()).validateToken(any());
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    @Test
+    void doFilterInternal_withNullPath() throws Exception {
+        // Simula quando request.getRequestURI() retorna null
+        when(request.getRequestURI()).thenReturn(null);
+        when(request.getHeader("Authorization")).thenReturn(null);
+
+        authServiceJwtFilter.doFilterInternal(request, response, filterChain);
+
+        // Verifica que não falhou com NullPointerException
+        verify(filterChain, times(1)).doFilter(request, response);
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
     }
 
 }

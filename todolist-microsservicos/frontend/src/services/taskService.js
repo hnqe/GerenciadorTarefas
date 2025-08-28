@@ -15,6 +15,12 @@ const api = axios.create({
     },
     (error) => Promise.reject(error)
   );  
+
+// Admin function for task statistics
+export const getTaskStats = async () => {
+  const response = await api.get("/tasks/admin/stats");
+  return response.data;
+};
   
 export default api;
   

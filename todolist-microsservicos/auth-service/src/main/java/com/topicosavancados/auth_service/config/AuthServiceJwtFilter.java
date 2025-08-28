@@ -29,6 +29,14 @@ public class AuthServiceJwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        
+        // Skip JWT processing for public endpoints
+        String path = request.getRequestURI();
+        if (path != null && (path.equals("/api/auth/login") || path.equals("/api/auth/register") || path.equals("/api/auth/validate-token"))) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -41,10 +49,12 @@ public class AuthServiceJwtFilter extends OncePerRequestFilter {
             String username = claims.getSubject();
             String role = claims.get("role", String.class);
             if (role == null) {
-                role = "ROLE_USER";
+                role = "USER";
             }
-
-            List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
+            
+            // Adiciona o prefixo ROLE_ se não estiver presente
+            String authorityRole = role.startsWith("ROLE_") ? role : "ROLE_" + role;
+            List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(authorityRole));
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(username, null, authorities);
             String userIdStr = claims.get("userId", String.class);

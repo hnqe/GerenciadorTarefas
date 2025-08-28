@@ -1,276 +1,471 @@
----
+# 📋 Sistema Gerenciador de Tarefas
 
-### **README**
+Um sistema completo de gerenciamento de tarefas desenvolvido com **Spring Boot** e **PostgreSQL**, disponível em **duas arquiteturas**: **Monolítica** e **Microsserviços**. Inclui funcionalidades de autenticação, CRUD de tarefas, timer Pomodoro e dashboard administrativo.
 
----
+[![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://openjdk.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.1-green.svg)](https://spring.io/projects/spring-boot)
+[![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue.svg)](https://www.postgresql.org/)
 
-### 1. Objetivo do Projeto
+## 🎯 Duas Arquiteturas Disponíveis
 
-O objetivo principal é desenvolver um sistema de gerenciamento de tarefas (**to-do list**) que inicialmente foi implementado como uma aplicação monolítica simples. 
+Este repositório contém **duas implementações** do mesmo sistema de gerenciamento de tarefas:
 
-Futuramente, o sistema será transformado em uma arquitetura de **microsserviços** para:
-- **Dividir responsabilidades**: Separar a lógica de negócios e a interface de usuário.
-- **Facilitar escalabilidade e manutenção**: Tornar o sistema modular e permitir atualizações independentes.
-- **Demonstrar boas práticas**: Implementar serviços RESTful, comunicação entre microsserviços e integração com bancos de dados.
+### 1. 🏢 **Versão Monolítica** (`todolist-monolitico/`)
+- **Uma única aplicação Spring Boot** com interface web Thymeleaf
+- **Banco único** PostgreSQL
+- **Tudo integrado**: autenticação, tarefas e interface no mesmo projeto
+- **Ideal para**: aprendizado, prototipagem rápida e projetos pequenos
 
----
-
-### 2. Descrição do Projeto Monolítico Atual
-
-#### **Tecnologias Utilizadas**
-
-- **Backend**:
-  - Spring Boot
-  - Spring Security
-  - Spring Data JPA
-  - PostgreSQL (persistência de dados)
-  - JWT (JSON Web Tokens) para autenticação
-  - WebClient para integração com APIs externas (ex.: FavQs para citações motivacionais)
-- **Frontend**:
-  - Thymeleaf (renderização de páginas HTML no backend)
-  - Bootstrap (estilização)
-
-#### **Funcionalidades do Sistema**
-
-- **Autenticação e autorização**:
-  - Login e registro de usuários.
-  - Controle de permissões (usuário comum e administrador).
-- **Gerenciamento de tarefas**:
-  - Adicionar, listar, editar e excluir tarefas.
-  - Atualizar status das tarefas (pendente, em andamento, concluído).
-- **Página inicial personalizada**:
-  - Saudação com o nome do usuário autenticado.
-  - Exibição de uma citação motivacional obtida via API externa.
-  - Resumo das tarefas do dia.
-
-##### API Externa Integrada
-A aplicação utiliza a API pública FavQs para obter citações motivacionais, exibidas na página inicial do usuário autenticado.
-
-Endpoint consumido: GET /qotd (quote of the day).
-A integração é realizada no backend por meio de Spring WebClient, e o conteúdo é retornado para o frontend.
-
-#### **Estrutura Atual do Projeto Monolítico**
-
-O projeto é uma aplicação monolítica onde todas as funcionalidades (backend, frontend e banco de dados) estão centralizadas em um único repositório.
+### 2. 🔧 **Versão Microsserviços** (`todolist-microsservicos/`)
+- **4 aplicações separadas**: Auth-Service, Task-Service, Pomodoro-Service e Frontend React
+- **Bancos independentes** para cada microsserviço
+- **APIs REST** com comunicação via HTTP
+- **Ideal para**: escalabilidade, manutenibilidade e sistemas complexos
 
 ---
 
-### 3. Configuração e Execução do Projeto Monolítico
+## 🏗️ Arquitetura Monolítica
 
-#### **Pré-requisitos**
-1. **Java 17** ou superior instalado.
-2. **PostgreSQL** configurado e rodando.
+A versão monolítica implementa todas as funcionalidades em uma única aplicação Spring Boot:
 
-#### **Configuração do Banco de Dados**
-Certifique-se de configurar o banco de dados PostgreSQL com as seguintes credenciais no arquivo `application.properties`:
+```
+┌─────────────────────────────────────────────────────┐
+│                APLICAÇÃO MONOLÍTICA                 │
+│                     :8080                           │
+├─────────────────────────────────────────────────────┤
+│ • Autenticação JWT                                  │
+│ • CRUD de Tarefas                                   │
+│ • Interface Web (Thymeleaf)                        │
+│ • Dashboard Administrativo                          │
+│ • API Externa (FavQs)                              │
+│ • Controllers + Services + Repositories            │
+└─────────────────────────────────────────────────────┘
+                            │
+                ┌─────────────────────┐
+                │    PostgreSQL       │
+                │    todolist         │
+                │    :5432            │
+                └─────────────────────┘
+```
 
+### ✨ **Funcionalidades da Versão Monolítica:**
+- 🔐 Sistema completo de login/registro
+- 📝 CRUD de tarefas com interface web
+- 🎨 Interface com **Thymeleaf** e **Bootstrap**
+- 📊 Dashboard com estatísticas
+- 💬 Citações motivacionais da API FavQs
+- 👨‍💼 Painel administrativo
+- 🔒 Segurança com Spring Security e JWT
+
+## 🏗️ Arquitetura de Microsserviços
+
+O projeto implementa uma **arquitetura de microsserviços** com 4 componentes principais:
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │    │   Auth-Service  │    │  Task-Service   │    │ Pomodoro-Service │
+│   (React)       │    │   :8080         │    │   :8081         │    │   :8082          │
+│   :3000         │    │                 │    │                 │    │                  │
+├─────────────────┤    ├─────────────────┤    ├─────────────────┤    ├─────────────────┤
+│ • Interface Web │    │ • Autenticação  │    │ • CRUD Tarefas  │    │ • Timer Pomodoro │
+│ • Dashboard     │────│ • JWT Tokens    │    │ • Kanban Board  │    │ • Sessões        │
+│ • Kanban Board  │    │ • Admin Panel   │    │ • API Externa   │    │ • Configurações  │
+│ • Timer Pomodoro│    │ • User Mgmt     │    │ • Task Stats    │    │ • Histórico      │
+└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │                       │
+         └───────────────────────┼───────────────────────┼───────────────────────┘
+                                 │                       │
+                    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+                    │  PostgreSQL     │    │  PostgreSQL     │    │  PostgreSQL     │
+                    │  auth_service   │    │  task_service   │    │ pomodoro_service │
+                    │  :5433          │    │  :5434          │    │  :5435          │
+                    └─────────────────┘    └─────────────────┘    └─────────────────┘
+```
+
+## ✨ Funcionalidades Principais
+
+### 🔐 **Autenticação e Autorização**
+- ✅ Sistema completo de registro e login
+- ✅ Autenticação JWT com refresh tokens
+- ✅ Controle de acesso baseado em roles (USER/ADMIN)
+- ✅ Dashboard administrativo com estatísticas
+
+### 📝 **Gerenciamento de Tarefas**
+- ✅ CRUD completo de tarefas
+- ✅ Sistema Kanban com drag & drop (Pendente → Em Andamento → Concluído)
+- ✅ Prioridades e datas de vencimento
+- ✅ Filtros e busca avançada
+- ✅ Estatísticas de produtividade
+
+### 🍅 **Timer Pomodoro Integrado**
+- ✅ Sessões de foco, pausa curta e pausa longa
+- ✅ Configurações personalizáveis de tempo
+- ✅ Vinculação de tarefas às sessões
+- ✅ Histórico de sessões e estatísticas
+- ✅ Controles de play/pause/stop
+- ✅ Notificações sonoras
+
+### 📊 **Dashboard e Relatórios**
+- ✅ Página inicial com resumo do dia
+- ✅ Citações motivacionais (API externa)
+- ✅ Gráficos de produtividade
+- ✅ Painel administrativo com métricas
+
+## 🚀 Instalação e Configuração
+
+### Pré-requisitos
+- **Java 17+** ([Download](https://openjdk.org/))
+- **PostgreSQL 15+** ([Download](https://www.postgresql.org/))
+- **Maven 3.8+** (ou usar o wrapper incluído)
+- **Node.js 18+** e **npm** (apenas para microsserviços) ([Download](https://nodejs.org/))
+- **Docker** e **Docker Compose** (opcional, recomendado para microsserviços)
+
+---
+
+## 🏢 Como Executar a Versão Monolítica
+
+### 1️⃣ Configurar Banco de Dados
+```sql
+-- No PostgreSQL, criar o banco:
+CREATE DATABASE todolist;
+```
+
+### 2️⃣ Configurar Aplicação
+```bash
+# 1. Clone o repositório
+git clone https://github.com/hnqe/GerenciadorTarefas.git
+cd GerenciadorTarefas/todolist-monolitico
+
+# 2. Configure application.properties (se necessário)
+# Arquivo: src/main/resources/application.properties
+```
+
+### 3️⃣ Executar Aplicação
+```bash
+# Compilar e executar
+./mvnw clean install
+./mvnw spring-boot:run
+
+# Ou usando Maven local
+mvn clean install
+mvn spring-boot:run
+```
+
+### 4️⃣ Acessar Aplicação
+- **URL:** http://localhost:8080
+- **Login Admin:** `admin` / `admin123`
+- **Páginas:**
+  - `/login` - Login
+  - `/register` - Registro
+  - `/home` - Dashboard principal
+  - `/tasks` - Gerenciamento de tarefas
+
+### ⚙️ Configuração do Monólito
 ```properties
+# application.properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/todolist
 spring.datasource.username=postgres
 spring.datasource.password=123
 spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
 ```
 
-#### **Passos para Execução**
-1. Clone o repositório.
-2. Compile o projeto com Maven:
-   ```
-   mvn clean install
-   ```
-3. Execute a aplicação:
-   ```
-   mvn spring-boot:run
-   ```
-4. Acesse no navegador:
-   - Página de login: `http://localhost:8080/login`
-   - Página inicial (após login): `http://localhost:8080/home`
-   - Gerenciamento de tarefas: `http://localhost:8080/tasks`
+---
+
+## 🔧 Como Executar os Microsserviços
+
+### Opção 1: Docker Compose (Recomendado)
+
+```bash
+# 1. Clone o repositório
+git clone https://github.com/hnqe/GerenciadorTarefas.git
+cd GerenciadorTarefas/todolist-microsservicos
+
+# 2. Suba todos os serviços
+docker-compose up -d
+
+# 3. Instale dependências do frontend
+cd frontend
+npm install
+
+# 4. Inicie o frontend
+npm start
+```
+
+### Opção 2: Instalação Manual
+
+#### 1️⃣ Configurar Bancos de Dados
+```sql
+-- No PostgreSQL, criar os bancos:
+CREATE DATABASE auth_service;
+CREATE DATABASE task_service;
+CREATE DATABASE pomodoro_service;
+```
+
+#### 2️⃣ Auth-Service
+```bash
+cd auth-service
+./mvnw clean install
+./mvnw spring-boot:run
+# Rodará em http://localhost:8080
+```
+
+#### 3️⃣ Task-Service
+```bash
+cd task-service
+./mvnw clean install
+./mvnw spring-boot:run
+# Rodará em http://localhost:8081
+```
+
+#### 4️⃣ Pomodoro-Service
+```bash
+cd pomodoro-service
+./mvnw clean install
+./mvnw spring-boot:run
+# Rodará em http://localhost:8082
+```
+
+#### 5️⃣ Frontend
+```bash
+cd frontend
+npm install
+npm start
+# Rodará em http://localhost:3000
+```
+
+## 🔧 Configuração dos Serviços
+
+### Auth-Service (Port 8080)
+```properties
+# application.properties
+server.port=8080
+spring.datasource.url=jdbc:postgresql://localhost:5433/auth_service
+spring.datasource.username=postgres
+spring.datasource.password=123
+jwt.secret=yourSecretKeyMustBeLongerAndMoreSecureInRealApplication
+```
+
+### Task-Service (Port 8081)
+```properties
+# application.properties
+server.port=8081
+spring.datasource.url=jdbc:postgresql://localhost:5434/task_service
+spring.datasource.username=postgres
+spring.datasource.password=123
+auth-service.url=http://localhost:8080
+```
+
+### Pomodoro-Service (Port 8082)
+```properties
+# application.properties
+server.port=8082
+spring.datasource.url=jdbc:postgresql://localhost:5435/pomodoro_service
+spring.datasource.username=postgres
+spring.datasource.password=123
+jwt.secret=yourSecretKeyMustBeLongerAndMoreSecureInRealApplication
+```
+
+## 📚 API Documentation
+
+### 🔐 Auth-Service Endpoints
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| POST | `/api/auth/register` | Registrar usuário | ❌ |
+| POST | `/api/auth/login` | Login usuário | ❌ |
+| GET | `/api/auth/validate-token` | Validar token JWT | ❌ |
+| GET | `/admin/dashboard` | Dashboard admin | ✅ ADMIN |
+| GET | `/admin/users` | Listar usuários | ✅ ADMIN |
+
+### 📝 Task-Service Endpoints
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| GET | `/api/tasks` | Listar tarefas | ✅ USER |
+| POST | `/api/tasks` | Criar tarefa | ✅ USER |
+| GET | `/api/tasks/{id}` | Buscar tarefa | ✅ USER |
+| PUT | `/api/tasks/edit/{id}` | Editar tarefa | ✅ USER |
+| DELETE | `/api/tasks/delete/{id}` | Deletar tarefa | ✅ USER |
+| GET | `/api/home/user-info` | Info do usuário | ✅ USER |
+| GET | `/api/home/tasks/today` | Tarefas do dia | ✅ USER |
+
+### 🍅 Pomodoro-Service Endpoints
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| GET | `/api/pomodoro/health` | Health check | ❌ |
+| POST | `/api/pomodoro/sessions` | Criar sessão | ✅ USER |
+| POST | `/api/pomodoro/sessions/{id}/start` | Iniciar sessão | ✅ USER |
+| POST | `/api/pomodoro/sessions/{id}/pause` | Pausar sessão | ✅ USER |
+| POST | `/api/pomodoro/sessions/{id}/stop` | Parar sessão | ✅ USER |
+| POST | `/api/pomodoro/sessions/{id}/complete` | Completar sessão | ✅ USER |
+| GET | `/api/pomodoro/sessions` | Listar sessões | ✅ USER |
+| GET | `/api/pomodoro/sessions/current` | Sessão atual | ✅ USER |
+| GET | `/api/pomodoro/settings` | Config. usuário | ✅ USER |
+| PUT | `/api/pomodoro/settings` | Atualizar config. | ✅ USER |
+
+## 🧪 Testes
+
+### Executar Testes Unitários
+```bash
+# Auth-Service
+cd auth-service
+./mvnw test
+
+# Task-Service  
+cd task-service
+./mvnw test
+
+# Pomodoro-Service
+cd pomodoro-service
+./mvnw test
+```
+
+### Executar Testes de Integração
+```bash
+# Docker-based (recomendado)
+cd auth-service && ./run-tests.bat
+cd task-service && ./run-tests.bat
+cd pomodoro-service && ./run-tests.bat
+
+# Todos os testes
+./run-integration-tests.bat
+```
+
+## 🎯 Como Usar
+
+### 1. Acesso Inicial
+- URL: **http://localhost:3000**
+- **Admin:** `admin` / `admin123`
+- **Usuário:** Registre uma nova conta
+
+### 2. Fluxo de Trabalho
+1. **Faça login** na aplicação
+2. **Crie tarefas** na seção "Tasks"
+3. **Use o Kanban** para organizar (arrastar e soltar)
+4. **Inicie sessões Pomodoro** para focar nas tarefas
+5. **Monitore estatísticas** no dashboard
+
+### 3. Funcionalidades do Pomodoro
+1. **Criar sessão** → vincular tarefa(s)
+2. **Configurar tempo** (25min foco, 5min pausa)
+3. **Iniciar timer** → tarefa muda para "Em Andamento"
+4. **Pausar/Retomar** conforme necessário
+5. **Completar** para salvar estatísticas
+
+## 🏭 Tecnologias Utilizadas
+
+### Backend
+- **Spring Boot 3.4.1** - Framework principal
+- **Spring Security** - Autenticação e autorização
+- **Spring Data JPA** - Persistência de dados
+- **PostgreSQL** - Banco de dados
+- **JWT (jjwt 0.11.5)** - Tokens de autenticação
+- **Maven** - Gerenciamento de dependências
+- **Docker** - Containerização
+
+### Frontend
+- **React 18.2.0** - Interface de usuário
+- **React Router** - Navegação
+- **Axios** - Cliente HTTP
+- **Bootstrap/CSS** - Estilização
+- **Context API** - Gerenciamento de estado
+
+### DevOps & Qualidade
+- **JUnit 5** - Testes unitários
+- **Testcontainers** - Testes de integração
+- **Docker Compose** - Orquestração de contêineres
+- **GitHub Actions** - CI/CD (configurável)
+
+## ⚖️ Comparação: Monólito vs Microsserviços
+
+| Aspecto | 🏢 Monolítico | 🔧 Microsserviços |
+|---------|---------------|-------------------|
+| **Complexidade** | ✅ Simples para iniciar | ❗ Maior complexidade inicial |
+| **Desenvolvimento** | ✅ Desenvolvimento rápido | ❗ Coordenação entre equipes |
+| **Deploy** | ✅ Um único artefato | ❗ Múltiplos deploys |
+| **Escalabilidade** | ❗ Escala tudo junto | ✅ Escala partes específicas |
+| **Tecnologias** | ❗ Stack unificado | ✅ Tecnologias por serviço |
+| **Manutenção** | ❗ Impacto em toda aplicação | ✅ Mudanças isoladas |
+| **Debugging** | ✅ Fácil debug local | ❗ Debug distribuído |
+| **Performance** | ✅ Chamadas locais | ❗ Latência de rede |
+| **Banco de Dados** | ❗ Acoplamento forte | ✅ Dados independentes |
+| **Ideal para** | Projetos pequenos/médios | Sistemas grandes/equipes |
+
+### 🎯 **Quando usar cada arquitetura?**
+
+#### 🏢 **Use o Monólito quando:**
+- ✅ Equipe pequena (1-5 desenvolvedores)
+- ✅ Projeto em fase inicial/prototipagem
+- ✅ Domínio do negócio bem definido
+- ✅ Requisitos de performance críticos
+- ✅ Simplicidade é prioridade
+
+#### 🔧 **Use Microsserviços quando:**
+- ✅ Equipe grande (múltiplos times)
+- ✅ Diferentes tecnologias por contexto
+- ✅ Escalabilidade independente necessária
+- ✅ Deploy independente é crucial
+- ✅ Domínios bem separados
 
 ---
 
-### 4. Evolução para Microsserviços
+## 📁 Estrutura do Projeto
 
-Para evoluir o projeto, dividimos a aplicação em três grandes partes:
-
-#### **Microsserviços Realizados**
-
-1. **Auth-Service**:
-   - Responsável pela autenticação e emissão de tokens JWT.
-   - Define usuários, roles (ADMIN, USER), validações de login, etc.
-   - Proverá endpoint de /admin/dashboard para simular privilégio de administrador.
-   - Persistência de dados no banco de dados PostgreSQL.
-
-2. **Task-Service**:
-   - Responsável pelo CRUD de tarefas (Create, Read, Update, Delete).
-   - Restringe acessos via token JWT fornecido pelo Auth-Service.
-   - Possui integração com o Postgres para persistência das tarefas.
-   - Retorna dados em formato JSON para ser consumido por qualquer frontend.
-   - Integração externa: também é responsável por buscar citações na API FavQs para exibição na página inicial. A aplicação utiliza a API pública FavQs para obter citações motivacionais, exibidas na página inicial do usuário autenticado.
-   Endpoint consumido: GET /qotd (quote of the day).
-   A integração é realizada no backend por meio de Spring WebClient, e o conteúdo é retornado para o frontend.
-
-3. **Frontend (React)**:
-   - Responsável pela interface do usuário.
-   - Consome as APIs do Auth-Service (login, registro) e do Task-Service (tarefas).
-   - Exibe listas de tarefas e tela de admin (se o usuário tiver ROLE_ADMIN).
-
-Essa arquitetura microsserviços permite que cada um seja executado em porta e ambiente separado:
-
- - Auth-Service em localhost:8080
- - Task-Service em localhost:8081
- - Frontend em localhost:3000
-
-Eles se comunicam via HTTP (REST).
-
----
-
-### 5. Configuração e Execução do Projeto Microsserviços
-
-A seguir, descrevemos passo a passo para rodar cada um dos serviços separadamente:
-
-#### 5.1 Auth-Service
-
-1. Pré-requisitos
-   - Java 17+
-   - Banco de dados PostgreSQL configurado
-   - Maven instalado
-
-2. Configuração no application.properties
-   ```properties
-   spring.datasource.url=jdbc:postgresql://localhost:5432/auth_service
-   spring.datasource.username=postgres
-   spring.datasource.password=123
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.show-sql=true
-   jwt.secret=yourSecretKeyMustBeLongerAndMoreSecureInRealApplication
-   ```
-
-3. Passos para execução
-   - Clonar/baixar o projeto do auth-service.
-   - No diretório do auth-service, rodar:
-
-     ```properties
-     mvn clean install
-     mvn spring-boot:run
-     ```
-   - O Auth-Service subirá em http://localhost:8080.
-
-4. Testar endpoints
-   - Registro: POST /api/auth/register
-   - Login: POST /api/auth/login
-   - Admin: GET /admin/dashboard (precisa de ROLE_ADMIN)
-   - Validate: GET /api/auth/validate-token?token=...
-
-#### 5.2 Task-Service
-
-1. Pré-requisitos
-   - Java 17+
-   - Outro banco PostgreSQL (ou a mesma instância com DB diferente)
-   - Maven instalado
-
-2. Configuração no application.properties
-   ```properties
-   spring.datasource.url=jdbc:postgresql://localhost:5432/task_service
-   spring.datasource.username=postgres
-   spring.datasource.password=123
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.show-sql=true
-
-   server.port=8081
-
-   auth-service.url=http://localhost:8080
-   jwt.secret=yourSecretKeyMustBeLongerAndMoreSecureInRealApplication
-   ```
-
-3. Passos para execução
-   - Clonar/baixar o projeto do task-service.
-   - No diretório do task-service, rodar:
-
-     ```properties
-     mvn clean install
-     mvn spring-boot:run
-     ```
-   - O Task-Service subirá em http://localhost:8081.
-
-4. Testar endpoints
-   - Listar tarefas: GET /api/tasks (requer token JWT).
-   - Criar tarefa: POST /api/tasks (body em JSON, requer token).
-   - Editar: PUT /api/tasks/edit/{id}
-   - Deletar: DELETE /api/tasks/delete/{id}
-   - Página de “home” do Task-Service (citações / tasks do dia): GET /api/home/user-info / GET /api/home/tasks/today
-
-#### 5.3 Task-Service
-
-1. Pré-requisitos
-   - Node.js e npm (ou yarn) instalados.
-
-2. Instalação
-   ```properties
-   cd frontend
-   npm install
-   ```
-
-3. Configurações
-   - Arquivo src/services/taskService.js aponta para http://localhost:8081/api (para o Task-Service).
-   - Arquivo src/services/authService.js aponta para http://localhost:8080/api/auth (para o Auth-Service).
-
-4. Execução 
-
-   ```properties
-   npm start
-   ```
-
-   Por padrão, estará em http://localhost:3000.
-
-5. Fluxo 
-  - Abra o navegador em http://localhost:3000.
-  - Cadastre usuário (Register) ou faça login (Login).
-  - Navegue para /home (terá a citação do dia + resumo das tasks).
-  - Clique em “Go to Tasks” para abrir o kanban (Pendente, In Progress, Done).
-  - Se logar com o usuário admin (senha admin123), verá um botão “Admin” no Header que acessa /admin-dashboard.
-
----
-
-### 6. Como Funciona a Comunicação
-
-- O Frontend obtém token JWT no Auth-Service (http://localhost:8080).
-- O token é armazenado no localStorage.
-- Em cada requisição ao Task-Service (http://localhost:8081), o frontend inclui Authorization: Bearer <token>.
-- O Task-Service, ao receber, valida o token localmente (decodifica JWT) e opcionalmente chama GET /api/auth/validate-token - no Auth-Service para confirmar se está válido.
-- Se for válido, libera o acesso.
-
----
-
-### 7. Configuração Geral e Observações
-
-- Cada serviço (Auth-Service e Task-Service) possui seu próprio banco e configurações.
-- Para rodar localmente, garanta que PostgreSQL esteja rodando e cada DB (auth_service, task_service) esteja criado.
-- Lembre-se de usar Java 17 (ou superior) para compatibilidade com o Spring Boot 3.x.
-- Caso deseje personalizar portas ou URLs, altere em application.properties e no frontend correspondente.
-
----
-
-### 8. Como Testar o Fluxo Completo
-
-1. Inicie o Auth-Service (mvn spring-boot:run na pasta do auth-service).
-2. Inicie o Task-Service (mvn spring-boot:run na pasta do task-service).
-3. Inicie o Frontend React (npm start).
-4. Acesse http://localhost:3000.
-5. Registre um usuário ou use o admin pré-criado (admin / admin123).
-6. Faça login, observe o token salvo no localStorage.
-7. Vá para Home => verá citação + lista de tarefas do dia.
-8. Vá para Tasks => kanban onde pode criar, arrastar (drag & drop) e editar tarefas.
-9. Se estiver logado como admin, verá o botão “Admin” => /admin-dashboard (que chama http://localhost:8080/admin/dashboard).
-
----
-
-### 9. Conclusão
-
-Este projeto demonstra:
-
-- Arquitetura de Microsserviços: cada contexto (autenticação, gerenciamento de tarefas, frontend) é isolado.
-- JWT: autenticação centralizada no Auth-Service, validada localmente pelo Task-Service.
-- React para o frontend desacoplado.
-- Integração de bancos de dados PostgreSQL independentes para cada serviço.
-- A arquitetura de microsserviços possibilita manutenção e escalabilidade simplificadas. Cada serviço pode evoluir, escalar ou até mesmo ser migrado para tecnologias diferentes sem impactar o resto da aplicação, contanto que as interfaces REST sejam mantidas.
+```
+GerenciadorTarefas/
+│
+├── 🏢 todolist-monolitico/          # VERSÃO MONOLÍTICA
+│   ├── src/main/java/com/todolist/
+│   │   ├── ToDoListApplication.java  # Classe principal
+│   │   ├── config/                   # Configurações (Security, JWT)
+│   │   ├── controller/              # Controllers web
+│   │   │   ├── AuthController.java  # Autenticação
+│   │   │   ├── HomeController.java  # Página inicial
+│   │   │   ├── TaskPageController.java # Tarefas
+│   │   │   └── AdminController.java # Admin
+│   │   ├── model/                   # Entidades JPA
+│   │   ├── repository/             # Repositórios
+│   │   └── service/                # Serviços de negócio
+│   ├── src/main/resources/
+│   │   ├── application.properties  # Configurações
+│   │   └── templates/              # Templates Thymeleaf
+│   │       ├── home.html           # Dashboard principal
+│   │       ├── login.html          # Tela de login
+│   │       ├── register.html       # Registro
+│   │       └── tasks.html          # Gerenciamento de tarefas
+│   ├── src/test/java/              # Testes unitários
+│   └── pom.xml                     # Dependências Maven
+│
+├── 🔧 todolist-microsservicos/      # VERSÃO MICROSSERVIÇOS
+│   ├── auth-service/               # Microsserviço de autenticação
+│   │   ├── src/main/java/         # Código fonte
+│   │   ├── src/test/java/         # Testes unitários e integração
+│   │   ├── Dockerfile             # Container da aplicação
+│   │   ├── Dockerfile.test        # Container para testes
+│   │   ├── run-tests.bat         # Script de teste Windows
+│   │   └── pom.xml               # Dependências Maven
+│   │
+│   ├── task-service/              # Microsserviço de tarefas
+│   │   ├── src/main/java/        # Código fonte
+│   │   ├── src/test/java/        # Testes
+│   │   └── [estrutura similar]
+│   │
+│   ├── pomodoro-service/         # Microsserviço Pomodoro
+│   │   ├── src/main/java/        # Código fonte
+│   │   ├── src/test/java/        # Testes
+│   │   └── [estrutura similar]
+│   │
+│   ├── frontend/                 # Aplicação React
+│   │   ├── src/
+│   │   │   ├── components/       # Componentes React
+│   │   │   ├── pages/           # Páginas da aplicação
+│   │   │   ├── services/        # Clientes API
+│   │   │   └── context/         # Contextos React
+│   │   ├── public/              # Arquivos estáticos
+│   │   └── package.json         # Dependências npm
+│   │
+│   ├── docker-compose.yml       # Orquestração completa
+│   ├── run-integration-tests.bat # Testes end-to-end
+│   └── .gitignore               # Arquivos ignorados
+│
+└── README.md                    # Este arquivo
+```

@@ -38,14 +38,12 @@ public class JwtTokenProvider {
 
     public Claims validateToken(String token) {
         try {
-            // Analisa e valida o token
             return Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey()) // Define a chave de assinatura
+                    .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token)
-                    .getBody(); // Retorna os claims do token
+                    .getBody();
         } catch (Exception e) {
-            // Lança uma exceção em caso de token inválido
             throw new RuntimeException("Invalid JWT token: " + e.getMessage(), e);
         }
     }

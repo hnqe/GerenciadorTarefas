@@ -1,42 +1,1388 @@
-/* src/index.css */
+/* TodoList Pro - Premium Modern Design */
 
-/* Reinicialização ou estilos globais */
-body {
-  background-color: #f4f4f9;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
+/* Pomodoro Timer Styles */
+.timer-circle {
+  transform: rotate(-90deg);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
-/* Classes específicas para telas de auth, etc. */
-.auth-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.timer-circle circle {
+  transition: stroke-dashoffset 1s ease-in-out;
+}
+
+/* CSS Variables - High Contrast Design */
+:root {
+  /* Brand Colors */
+  --primary: #4f46e5;
+  --primary-light: #6366f1;
+  --primary-dark: #3730a3;
+  --accent: #0891b2;
+  --success: #059669;
+  --warning: #d97706;
+  --danger: #dc2626;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --gradient-accent: linear-gradient(135deg, #0891b2 0%, #1d4ed8 100%);
+  --gradient-success: linear-gradient(135deg, #059669 0%, #047857 100%);
+  --gradient-warning: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  --gradient-danger: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  
+  /* Light Mode - Better Contrast */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --surface: #ffffff;
+  --surface-hover: #f1f5f9;
+  
+  /* Text Colors - High Contrast */
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-tertiary: #6b7280;
+  --text-inverse: #ffffff;
+  
+  /* Border & Dividers */
+  --border: #d1d5db;
+  --border-light: #e5e7eb;
+  --border-dark: #9ca3af;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* Glass morphism */
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  
+  /* Spacing */
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+}
+
+/* Dark Theme - High Contrast */
+[data-bs-theme="dark"] {
+  /* Dark Backgrounds - Much Better Contrast */
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --bg-tertiary: #374151;
+  --surface: #1f2937;
+  --surface-hover: #374151;
+  
+  /* Dark Text - High Contrast */
+  --text-primary: #ffffff;
+  --text-secondary: #e5e7eb;
+  --text-tertiary: #9ca3af;
+  
+  /* Dark Borders */
+  --border: #4b5563;
+  --border-light: #374151;
+  --border-dark: #6b7280;
+  
+  /* Dark Glass */
+  --glass-bg: rgba(31, 41, 55, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  
+  /* Dark Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+}
+
+/* Global Reset & Base Styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  transition: all 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.125rem; }
+h5 { font-size: 1rem; }
+h6 { font-size: 0.875rem; }
+
+p {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+/* Layout Components */
+.container-custom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Cards & Surfaces */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--border-dark);
+  box-shadow: var(--shadow);
+}
+
+.card-elevated {
+  box-shadow: var(--shadow-lg);
+  border: none;
+}
+
+.card-elevated:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.modern-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.modern-card:hover {
+  border-color: var(--border-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* Glass Effects */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+}
+
+.gradient-bg {
+  background: var(--gradient-primary);
   min-height: 100vh;
 }
 
-.auth-box {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* Buttons */
+.btn {
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--text-inverse);
+  border-color: var(--primary);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-gradient {
+  background: var(--gradient-primary);
+  color: var(--text-inverse);
+  border: none;
+  font-weight: 600;
+  border-radius: var(--radius);
+  padding: 12px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
   width: 100%;
-  max-width: 400px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.4s;
 }
 
-/* Estilo de .task-pendente, etc. */
-.task-pendente {
-  background-color: #fff3cd;
-  border-left: 5px solid #ffc107;
+.btn-gradient:hover::before {
+  left: 100%;
 }
 
-.task-em_andamento {
-  background-color: #d1ecf1;
-  border-left: 5px solid #17a2b8;
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
 }
 
-.task-concluido {
-  background-color: #d4edda;
-  border-left: 5px solid #28a745;
+.btn-outline-primary {
+  background: transparent;
+  color: var(--primary);
+  border-color: var(--border);
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary);
+  color: var(--text-inverse);
+  border-color: var(--primary);
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.btn-lg {
+  padding: 16px 32px;
+  font-size: 16px;
+}
+
+/* Task Cards */
+.task-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+/* Task Card Content - Light Mode */
+.task-title {
+  color: var(--text-primary);
+}
+
+.task-description {
+  color: var(--text-secondary);
+  fontSize: 14px;
+  lineHeight: 1.4;
+}
+
+.task-due-date {
+  color: var(--text-tertiary);
+}
+
+.task-card:hover {
+  border-color: var(--border-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.task-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: var(--radius) 0 0 var(--radius);
+  transition: width 0.2s ease;
+}
+
+.task-card:hover::before {
+  width: 4px;
+}
+
+/* Status Colors - High Contrast */
+.task-pendente::before {
+  background: var(--warning);
+}
+
+.task-em_andamento::before {
+  background: var(--accent);
+}
+
+.task-concluido::before {
+  background: var(--success);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-pendente {
+  background: var(--warning);
+  color: var(--text-inverse);
+}
+
+.status-em_andamento {
+  background: var(--accent);
+  color: var(--text-inverse);
+}
+
+.status-concluido {
+  background: var(--success);
+  color: var(--text-inverse);
+}
+
+/* Dynamic status badges */
+.status-badge.status-pendente {
+  background: var(--warning);
+  color: var(--text-inverse);
+}
+
+.status-badge.status-em_andamento {
+  background: var(--accent);
+  color: var(--text-inverse);
+}
+
+.status-badge.status-concluido {
+  background: var(--success);
+  color: var(--text-inverse);
+}
+
+/* Priority Badges - High Contrast */
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.priority-low {
+  background: var(--success);
+  color: var(--text-inverse);
+}
+
+.priority-medium {
+  background: var(--warning);
+  color: var(--text-inverse);
+}
+
+.priority-high {
+  background: var(--danger);
+  color: var(--text-inverse);
+}
+
+.priority-critical {
+  background: var(--danger);
+  color: var(--text-inverse);
+  font-weight: 700;
+}
+
+/* Form Controls */
+.form-control {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-control::placeholder {
+  color: var(--text-tertiary);
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.form-select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+/* Input Groups */
+.input-group {
+  display: flex;
+  align-items: center;
+}
+
+.input-group-text {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-right: none;
+  border-radius: var(--radius) 0 0 var(--radius);
+  padding: 12px 16px;
+  color: var(--text-secondary);
+}
+
+.input-group .form-control {
+  border-left: none;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* Header - High Contrast */
+.modern-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Navbar Brand Colors */
+.navbar-brand {
+  color: var(--text-primary) !important;
+}
+
+.navbar-brand h1 {
+  color: var(--primary) !important;
+  font-weight: 700;
+}
+
+.navbar-brand small {
+  color: var(--text-secondary) !important;
+}
+
+/* Navigation Buttons */
+.btn-outline-primary {
+  color: var(--primary);
+  border-color: var(--border-dark);
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary);
+  color: var(--text-inverse);
+  border-color: var(--primary);
+}
+
+.btn-outline-secondary {
+  color: var(--text-secondary);
+  border-color: var(--border-dark);
+}
+
+.btn-outline-secondary:hover {
+  background: var(--text-secondary);
+  color: var(--text-inverse);
+  border-color: var(--text-secondary);
+}
+
+.btn-outline-info {
+  color: var(--accent);
+  border-color: var(--border-dark);
+}
+
+.btn-outline-info:hover {
+  background: var(--accent);
+  color: var(--text-inverse);
+  border-color: var(--accent);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+}
+
+.dropdown-item {
+  color: var(--text-primary);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.dropdown-header {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.dropdown-divider {
+  border-color: var(--border);
+}
+
+/* Auth Pages - Fixed Contrast */
+.auth-container {
+  background: var(--gradient-primary);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.auth-card {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xl);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Auth Card Content - High Contrast */
+.auth-card h1 {
+  color: var(--primary) !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
+
+.auth-card p {
+  color: var(--text-secondary) !important;
+}
+
+.auth-card h4 {
+  color: var(--text-primary) !important;
+}
+
+.auth-card .form-label {
+  color: var(--text-primary) !important;
+}
+
+.auth-card .input-group-text {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+.auth-card .form-control {
+  background: var(--surface);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.auth-card .form-control::placeholder {
+  color: var(--text-tertiary);
+}
+
+.auth-card .btn-outline-light {
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.auth-card .btn-outline-light:hover {
+  background: var(--primary);
+  color: var(--text-inverse);
+  border-color: var(--primary);
+}
+
+/* Auth Form Icon Fixes - Light Mode First */
+.auth-card .input-group-text {
+  background: var(--bg-tertiary);
+  color: var(--text-primary) !important;
+  border-color: var(--border);
+}
+
+.auth-card .form-control {
+  background: var(--surface);
+  color: var(--text-primary) !important;
+  border-color: var(--border);
+}
+
+.auth-card .form-control::placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+.auth-card .form-label {
+  color: var(--text-primary) !important;
+}
+
+.auth-card .form-label i {
+  color: var(--text-primary) !important;
+}
+
+.auth-card h1 {
+  color: var(--primary) !important;
+  text-shadow: none !important;
+}
+
+.auth-card h4 {
+  color: var(--text-primary) !important;
+}
+
+.auth-card h4 i {
+  color: var(--text-primary) !important;
+}
+
+.auth-card p {
+  color: var(--text-secondary) !important;
+}
+
+.auth-card .btn-outline-light {
+  color: var(--text-primary) !important;
+  border-color: var(--border);
+}
+
+.auth-card .btn-outline-light:hover {
+  background: var(--primary);
+  color: var(--text-inverse) !important;
+  border-color: var(--primary);
+}
+
+/* Dark Mode Auth Overrides */
+[data-bs-theme="dark"] .auth-card {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+[data-bs-theme="dark"] .auth-card .input-group-text {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-bs-theme="dark"] .auth-card .form-control {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-bs-theme="dark"] .auth-card .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+[data-bs-theme="dark"] .auth-card .form-label {
+  color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .auth-card h1 {
+  color: var(--primary-light) !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+[data-bs-theme="dark"] .auth-card h4 {
+  color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .auth-card p {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+[data-bs-theme="dark"] .auth-card .btn-outline-light {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+[data-bs-theme="dark"] .auth-card .btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Drag and Drop */
+.column-drop-zone {
+  min-height: 120px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-tertiary);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+.column-drop-zone.drag-over {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.05);
+  color: var(--primary);
+}
+
+/* Kanban Columns - High Contrast */
+.kanban-column {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Column titles - Light mode */
+.column-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827 !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Kanban column h2 - Light mode */
+.kanban-column h2 {
+  color: #111827 !important;
+}
+
+.task-count {
+  background: var(--bg-tertiary);
+  color: #374151 !important;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+/* Column titles - Dark mode - TEXTO ESCURO nas colunas claras - FORÇA MÁXIMA */
+[data-bs-theme="dark"] .column-title,
+[data-bs-theme="dark"] .column-title *,
+[data-bs-theme="dark"] .kanban-column h2,
+[data-bs-theme="dark"] .kanban-column .column-title,
+[data-bs-theme="dark"] div[class*="column"] h2,
+[data-bs-theme="dark"] div[class*="column"] h4,
+[data-bs-theme="dark"] div[class*="column"] h5,
+[data-bs-theme="dark"] div[class*="column"] h6 {
+  color: #1f2937 !important;
+  text-shadow: none !important;
+}
+
+[data-bs-theme="dark"] .task-count {
+  color: #374151 !important;
+}
+
+/* Empty State - High Contrast */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary) !important;
+}
+
+.empty-state h3 {
+  color: var(--text-secondary) !important;
+}
+
+.empty-state p {
+  color: var(--text-tertiary) !important;
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+  color: var(--text-tertiary) !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.fade-in { animation: fadeIn 0.3s ease-out; }
+.slide-in-up { animation: slideInUp 0.4s ease-out; }
+.pulse { animation: pulse 2s infinite; }
+
+/* Loading States */
+.loading {
+  background: linear-gradient(90deg, var(--bg-tertiary) 0%, var(--border) 50%, var(--bg-tertiary) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius);
+}
+
+/* Empty States */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-tertiary);
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+  color: var(--text-secondary);
+}
+
+.theme-toggle:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-dark);
+}
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  top: 80px;
+  right: 24px;
+  z-index: 1050;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-dark);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container-custom {
+    padding: 0 16px;
+  }
+  
+  .modern-card {
+    padding: 16px;
+  }
+  
+  .auth-card {
+    padding: 24px;
+    margin: 16px;
+  }
+  
+  .task-card {
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+  
+  .btn {
+    padding: 10px 16px;
+  }
+  
+  .btn-lg {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 20px;
+  }
+  
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1.125rem; }
+}
+
+/* Focus States */
+.btn:focus-visible,
+.form-control:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Remove focus outline and default borders from Quick Start buttons */
+.quick-start-btn:focus,
+.quick-start-btn:focus-visible,
+.btn-outline-info.quick-start-btn,
+.btn-outline-info.quick-start-btn:focus,
+.btn-outline-info.quick-start-btn:focus-visible,
+.btn-outline-danger.quick-start-btn:focus,
+.btn-outline-danger.quick-start-btn:focus-visible,
+.btn-outline-warning.quick-start-btn:focus,
+.btn-outline-warning.quick-start-btn:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid transparent !important;
+}
+
+/* Task selection modal */
+.max-height-200 {
+  max-height: 200px;
+}
+
+/* Focus task completion buttons */
+.btn-sm.btn-outline-success {
+  border-width: 1px;
+  transition: all 0.2s ease;
+}
+
+.btn-sm.btn-outline-success:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(25, 135, 84, 0.3);
+}
+
+/* Disabled States */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Modal Fixes for Dark Mode */
+[data-bs-theme="dark"] .modal-content {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-bs-theme="dark"] .modal-header {
+  background: var(--surface) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+[data-bs-theme="dark"] .modal-title {
+  color: var(--text-primary) !important;
+}
+
+[data-bs-theme="dark"] .modal-body {
+  background: var(--surface) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-bs-theme="dark"] .modal-body strong {
+  color: var(--text-primary) !important;
+}
+
+[data-bs-theme="dark"] .modal-footer {
+  background: var(--surface) !important;
+  border-top: 1px solid var(--border) !important;
+}
+
+[data-bs-theme="dark"] .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Footer Styling */
+.footer-custom {
+  background: var(--surface);
+  color: var(--text-tertiary);
+  border-color: var(--border);
+  fontSize: 0.9rem;
+}
+
+/* Footer Dark Mode */
+[data-bs-theme="dark"] .footer-custom {
+  background: var(--surface) !important;
+  color: var(--text-tertiary) !important;
+  border-color: var(--border) !important;
+}
+
+/* Dashboard Title - Should be visible in dark mode */
+.dashboard-title {
+  color: var(--text-primary) !important;
+}
+
+[data-bs-theme="dark"] .dashboard-title {
+  color: #ffffff !important;
+}
+
+/* Override any conflicting rules for dashboard title */
+[data-bs-theme="dark"] h2.dashboard-title {
+  color: #ffffff !important;
+}
+
+/* Force dashboard title to be white in dark mode */
+[data-bs-theme="dark"] .dashboard-title,
+[data-bs-theme="dark"] h2.dashboard-title.fw-bold,
+html[data-bs-theme="dark"] .dashboard-title {
+  color: #ffffff !important;
+}
+
+/* Header Elements - Better Contrast */
+.header-title {
+  color: var(--primary) !important;
+}
+
+.header-username {
+  color: var(--text-primary) !important;
+}
+
+.header-role {
+  color: var(--text-tertiary) !important;
+}
+
+/* Header Dark Mode */
+[data-bs-theme="dark"] .header-title {
+  color: var(--primary-light) !important;
+}
+
+[data-bs-theme="dark"] .header-username {
+  color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .header-role {
+  color: #9ca3af !important;
+}
+
+/* Home Page Elements */
+.welcome-title {
+  color: var(--text-primary) !important;
+}
+
+.inspire-text {
+  color: var(--text-secondary) !important;
+}
+
+.tasks-today-title {
+  color: var(--text-primary) !important;
+}
+
+/* Home Page Dark Mode */
+[data-bs-theme="dark"] .welcome-title {
+  color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] h2.welcome-title {
+  color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .inspire-text {
+  color: #d1d5db !important;
+}
+
+[data-bs-theme="dark"] .tasks-today-title {
+  color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] h3.tasks-today-title {
+  color: #ffffff !important;
+}
+
+/* FORÇA MÁXIMA - Welcome text must be white in dark mode */
+html[data-bs-theme="dark"] .welcome-title,
+html[data-bs-theme="dark"] h2.welcome-title,
+html[data-bs-theme="dark"] h2.welcome-title.fw-bold {
+  color: #ffffff !important;
+}
+
+html[data-bs-theme="dark"] .tasks-today-title,
+html[data-bs-theme="dark"] h3.tasks-today-title {
+  color: #ffffff !important;
+}
+
+/* Bootstrap Overrides for High Contrast */
+.text-muted {
+  color: var(--text-secondary) !important;
+}
+
+.text-white {
+  color: var(--text-inverse) !important;
+}
+
+.text-white-50 {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.text-primary {
+  color: var(--primary) !important;
+}
+
+.text-success {
+  color: var(--success) !important;
+}
+
+.text-warning {
+  color: var(--warning) !important;
+}
+
+.text-danger {
+  color: var(--danger) !important;
+}
+
+.text-info {
+  color: var(--accent) !important;
+}
+
+.bg-success-subtle {
+  background-color: rgba(5, 150, 105, 0.1) !important;
+}
+
+.bg-danger-subtle {
+  background-color: rgba(220, 38, 38, 0.1) !important;
+}
+
+.bg-warning-subtle {
+  background-color: rgba(217, 119, 6, 0.1) !important;
+}
+
+.bg-info-subtle {
+  background-color: rgba(8, 145, 178, 0.1) !important;
+}
+
+/* Dark mode text overrides */
+[data-bs-theme="dark"] .text-muted {
+  color: var(--text-secondary) !important;
+}
+
+[data-bs-theme="dark"] .bg-success-subtle {
+  background-color: rgba(5, 150, 105, 0.2) !important;
+}
+
+[data-bs-theme="dark"] .bg-danger-subtle {
+  background-color: rgba(220, 38, 38, 0.2) !important;
+}
+
+[data-bs-theme="dark"] .bg-warning-subtle {
+  background-color: rgba(217, 119, 6, 0.2) !important;
+}
+
+[data-bs-theme="dark"] .bg-info-subtle {
+  background-color: rgba(8, 145, 178, 0.2) !important;
+}
+
+/* Light Mode - Dark Text */
+h1, h2, h3, h4, h5, h6 {
+  color: #111827 !important;
+}
+
+.fw-bold {
+  color: #111827 !important;
+}
+
+/* Cards with proper light mode colors */
+.col .modern-card h3 {
+  color: #111827 !important;
+}
+
+.col .modern-card p {
+  color: #374151 !important;
+}
+
+/* Column headers in Kanban - Light Mode */
+.col h4,
+.col h5,
+.col h6 {
+  color: #111827 !important;
+}
+
+/* Task cards text - Light Mode */
+.task-card h5,
+.task-card h6,
+.task-card p,
+.task-card small {
+  color: #111827 !important;
+}
+
+/* Empty state - Light Mode */
+.empty-state {
+  color: #374151 !important;
+}
+
+.empty-state h3 {
+  color: #374151 !important;
+}
+
+.empty-state p {
+  color: #6b7280 !important;
+}
+
+/* Dark Mode - Light Text */
+[data-bs-theme="dark"] h1,
+[data-bs-theme="dark"] h2,
+[data-bs-theme="dark"] h3,
+[data-bs-theme="dark"] h4,
+[data-bs-theme="dark"] h5,
+[data-bs-theme="dark"] h6 {
+  color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .fw-bold {
+  color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .col .modern-card h3 {
+  color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .col .modern-card p {
+  color: #e5e7eb !important;
+}
+
+[data-bs-theme="dark"] .col h4,
+[data-bs-theme="dark"] .col h5,
+[data-bs-theme="dark"] .col h6,
+[data-bs-theme="dark"] .col-lg-4 h4,
+[data-bs-theme="dark"] .col-lg-4 h5,
+[data-bs-theme="dark"] .col-lg-4 h6,
+[data-bs-theme="dark"] .col-md-4 h4,
+[data-bs-theme="dark"] .col-md-4 h5,
+[data-bs-theme="dark"] .col-md-4 h6 {
+  color: #1f2937 !important;
+}
+
+[data-bs-theme="dark"] .task-card h5,
+[data-bs-theme="dark"] .task-card h6,
+[data-bs-theme="dark"] .task-card p,
+[data-bs-theme="dark"] .task-card small {
+  color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .empty-state {
+  color: #374151 !important;
+}
+
+[data-bs-theme="dark"] .empty-state h3 {
+  color: #374151 !important;
+}
+
+[data-bs-theme="dark"] .empty-state p {
+  color: #6b7280 !important;
+}
+
+/* REGRA UNIVERSAL PARA GARANTIR TEXTO ESCURO NAS COLUNAS KANBAN */
+[data-bs-theme="dark"] .kanban-column h1,
+[data-bs-theme="dark"] .kanban-column h2,
+[data-bs-theme="dark"] .kanban-column h3,
+[data-bs-theme="dark"] .kanban-column h4,
+[data-bs-theme="dark"] .kanban-column h5,
+[data-bs-theme="dark"] .kanban-column h6,
+[data-bs-theme="dark"] .kanban-column .column-title,
+[data-bs-theme="dark"] .kanban-column .column-header h4,
+[data-bs-theme="dark"] .kanban-column .column-header h5,
+[data-bs-theme="dark"] .kanban-column .column-header h6 {
+  color: #111827 !important;
+  text-shadow: none !important;
+}
+
+/* FORÇA MÁXIMA - Override qualquer estilo inline */
+[data-bs-theme="dark"] .kanban-column h2.text-center {
+  color: #1f2937 !important;
+}
+
+[data-bs-theme="dark"] .kanban-column .empty-state {
+  color: #4b5563 !important;
+}
+
+/* Se não funcionar, força TUDO */
+html[data-bs-theme="dark"] .kanban-column h2 {
+  color: #1f2937 !important;
+}
+
+html[data-bs-theme="dark"] .kanban-column p {
+  color: #4b5563 !important;
+}
+
+/* Task Card Content - Dark Mode with High Contrast */
+[data-bs-theme="dark"] .task-card .task-title {
+  color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .task-card .task-description {
+  color: #e5e7eb !important;
+}
+
+[data-bs-theme="dark"] .task-card .task-due-date {
+  color: #9ca3af !important;
+}
+
+/* Task Card general text in dark mode */
+[data-bs-theme="dark"] .task-card h5,
+[data-bs-theme="dark"] .task-card p,
+[data-bs-theme="dark"] .task-card small {
+  color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .task-card .task-description {
+  color: #d1d5db !important;
+}
+
+[data-bs-theme="dark"] .task-card .task-due-date {
+  color: #9ca3af !important;
 }

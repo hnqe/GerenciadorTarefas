@@ -2,12 +2,15 @@ package com.topicosavancados.auth_service.config;
 
 import com.topicosavancados.auth_service.model.User;
 import com.topicosavancados.auth_service.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AdminInitializer implements CommandLineRunner {
 
+    private static final Logger logger = LoggerFactory.getLogger(AdminInitializer.class);
     private final UserService userService;
 
     public AdminInitializer(UserService userService) {
@@ -24,10 +27,9 @@ public class AdminInitializer implements CommandLineRunner {
             admin.setPassword("admin123");
             admin.setRole("ADMIN");
             userService.createAdmin(admin);
-            System.out.println("Admin user created.");
-            System.out.println("Role for user " + adminUsername + ": ROLE_" + admin.getRole());
+            logger.info("Admin user created with username: {}", adminUsername);
         } else {
-            System.out.println("Admin user already exists.");
+            logger.info("Admin user already exists: {}", adminUsername);
         }
     }
 

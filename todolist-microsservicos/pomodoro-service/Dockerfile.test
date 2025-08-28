@@ -1,0 +1,9 @@
+# Dockerfile específico para executar todos os testes
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+
+# Copiar arquivos do projeto
+COPY . .
+
+# Executar todos os testes
+CMD ["./mvnw", "clean", "test"]

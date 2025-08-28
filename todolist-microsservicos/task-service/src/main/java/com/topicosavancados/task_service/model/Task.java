@@ -22,7 +22,7 @@ public class Task {
     private LocalDate dueDate;
 
     @Enumerated(EnumType.STRING)
-    private TaskStatus status = TaskStatus.PENDENTE;
+    private TaskStatus status = TaskStatus.TODO;
 
     @Column(name = "priority")
     private String priority; // "LOW", "MEDIUM", "HIGH", "CRITICAL"

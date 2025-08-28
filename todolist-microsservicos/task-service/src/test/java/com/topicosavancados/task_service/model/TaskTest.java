@@ -43,8 +43,8 @@ class TaskTest {
         assertEquals(dueDate, task.getDueDate());
 
         // Status
-        task.setStatus(TaskStatus.CONCLUIDO);
-        assertEquals(TaskStatus.CONCLUIDO, task.getStatus());
+        task.setStatus(TaskStatus.COMPLETED);
+        assertEquals(TaskStatus.COMPLETED, task.getStatus());
 
         // Priority
         String priority = "HIGH";
@@ -68,7 +68,7 @@ class TaskTest {
         String title = "Constructor Title";
         String desc = "Constructor Desc";
         LocalDate date = LocalDate.of(2025, 1, 1);
-        TaskStatus status = TaskStatus.EM_ANDAMENTO;
+        TaskStatus status = TaskStatus.IN_PROGRESS;
         String priority = "CRITICAL";
         String username = "constructUser";
         UUID userId = UUID.randomUUID();

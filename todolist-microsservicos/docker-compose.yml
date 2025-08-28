@@ -1,0 +1,114 @@
+version: '3.9'
+
+services:
+  # --- BANCO DE DADOS DO AUTH SERVICE ---
+  auth-db:
+    image: postgres:15.3
+    container_name: auth_db_container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: auth_service
+    ports:
+      - "5433:5432"
+    # A porta 5433 no host mapeia para 5432 dentro do container
+    # (caso queira testar local, mas não conflitar com um PostgreSQL local)
+
+  # --- BANCO DE DADOS DO TASK SERVICE ---
+  task-db:
+    image: postgres:15.3
+    container_name: task_db_container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: task_service
+    ports:
+      - "5434:5432"
+
+  # --- BANCO DE DADOS DO POMODORO SERVICE ---
+  pomodoro-db:
+    image: postgres:15.3
+    container_name: pomodoro_db_container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: pomodoro_service
+    ports:
+      - "5435:5432"
+
+
+  # --- AUTH SERVICE ---
+  auth-service:
+    container_name: auth_service_container
+    build: ./auth-service  # caminho onde está o Dockerfile do Auth
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-db
+    environment:
+      # Sobrescrevendo configs do Spring
+      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/auth_service
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123
+
+      # JWT
+      JWT_SECRET: yourSecretKeyMustBeLongerAndMoreSecureInRealApplicationForHS512RequiresAtLeast512Bits
+
+      # Se você quiser "spring.jpa.hibernate.ddl-auto=update" via env:
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+  # --- TASK SERVICE ---
+  task-service:
+    container_name: task_service_container
+    build: ./task-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - task-db
+      - auth-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://task-db:5432/task_service
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123
+
+      # Precisamos que o Task-Service "enxergue" o Auth-Service dentro da rede do Docker
+      # Ele não vai chamar "localhost:8080", e sim "auth-service:8080"
+      # MAS para o Spring, você criou a property "auth-service.url"?
+      # Vamos sobrescrever com:
+      AUTH-SERVICE_URL: http://auth-service:8080
+      # ou
+      auth-service.url: http://auth-service:8080
+
+      # JWT
+      JWT_SECRET: yourSecretKeyMustBeLongerAndMoreSecureInRealApplicationForHS512RequiresAtLeast512Bits
+
+      # Se quiser JPA
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+  # --- POMODORO SERVICE ---
+  pomodoro-service:
+    container_name: pomodoro_service_container
+    build: ./pomodoro-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - pomodoro-db
+      - auth-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://pomodoro-db:5432/pomodoro_service
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123
+
+      # Services URLs
+      AUTH-SERVICE_URL: http://auth-service:8080
+      TASK-SERVICE_URL: http://task-service:8081
+
+      # JWT
+      JWT_SECRET: yourSecretKeyMustBeLongerAndMoreSecureInRealApplicationForHS512RequiresAtLeast512Bits
+
+      # CORS
+      CORS_ALLOWED-ORIGINS: http://localhost:3000
+
+      # JPA
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+

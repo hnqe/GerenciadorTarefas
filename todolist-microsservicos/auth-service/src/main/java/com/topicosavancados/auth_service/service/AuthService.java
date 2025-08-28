@@ -2,6 +2,8 @@ package com.topicosavancados.auth_service.service;
 
 import com.topicosavancados.auth_service.config.JwtTokenProvider;
 import com.topicosavancados.auth_service.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -9,8 +11,9 @@ import java.util.UUID;
 @Service
 public class AuthService {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserService userService; // Serviço para lidar com usuários
+    private final UserService userService;
 
     public AuthService(JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -27,12 +30,10 @@ public class AuthService {
 
     public boolean validateToken(String token) {
         try {
-            // Valida o token usando o JwtTokenProvider
             jwtTokenProvider.validateToken(token);
             return true;
         } catch (Exception e) {
-            // Log para debugging
-            System.err.println("Token validation failed: " + e.getMessage());
+            logger.debug("Token validation failed: {}", e.getMessage());
             return false;
         }
     }

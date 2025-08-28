@@ -43,3 +43,25 @@ export const getAdminDashboard = async () => {
   const response = await axios.get(`${API_URL}/admin/dashboard`, { headers });
   return response.data; // ex: "Bem-vindo ao painel do administrador!"
 };
+
+/**
+ * Busca estatísticas do sistema para admin
+ */
+export const getAdminStats = async () => {
+  const token = localStorage.getItem("jwt");
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+  const response = await axios.get(`${API_URL}/admin/stats`, { headers });
+  return response.data;
+};
+
+/**
+ * Busca lista de todos os usuários para admin
+ */
+export const getAllUsers = async () => {
+  const token = localStorage.getItem("jwt");
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+  const response = await axios.get(`${API_URL}/admin/users`, { headers });
+  return response.data;
+};

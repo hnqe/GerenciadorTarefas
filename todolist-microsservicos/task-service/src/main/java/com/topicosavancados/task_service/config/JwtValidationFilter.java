@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,51 +40,40 @@ public class JwtValidationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain) {
+                                    FilterChain filterChain) throws IOException, ServletException {
 
         String token = extractTokenFromRequest(request);
         logger.info("Authorization token received: {}", token);
 
         if (token == null) {
-            logger.warn("Authorization token is missing");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            filterChain.doFilter(request, response);
             return;
         }
 
         try {
-            // Extrai os claims (subject = username, userId, role, etc.)
             Claims claims = extractClaimsFromToken(token);
             String username = claims.getSubject();
-            String role = claims.get("role", String.class);  // ex: "ROLE_ADMIN" ou "ROLE_USER"
+            String role = claims.get("role", String.class);
             if (role == null) {
-                // Fallback se não vier nada
-                role = "ROLE_USER";
+                role = "USER";
             }
-
-            // userId no claim
+            
+            String authorityRole = role.startsWith("ROLE_") ? role : "ROLE_" + role;
             UUID userId = UUID.fromString(claims.get("userId", String.class));
             logger.info("Parsed token: username={}, userId={}, role={}", username, userId, role);
-
-            // Opcional: Validar o token chamando o AuthService
             Boolean isValid = validateTokenWithAuthService(token);
 
             if (Boolean.TRUE.equals(isValid)) {
                 logger.info("Token is valid for user: {}", username);
 
-                // Cria as authorities conforme a role do token
                 List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                authorities.add(new SimpleGrantedAuthority(role));
+                authorities.add(new SimpleGrantedAuthority(authorityRole));
 
-                // Configura Authentication
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(username, null, authorities);
-                // userId como details, se quiser usar depois
                 authentication.setDetails(userId);
 
-                // Insere no SecurityContext
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
-                // Continua o fluxo
                 filterChain.doFilter(request, response);
             } else {
                 logger.warn("Token validation failed for user: {}", username);
@@ -121,7 +112,6 @@ public class JwtValidationFilter extends OncePerRequestFilter {
      */
     protected Boolean validateTokenWithAuthService(String token) {
         try {
-            // Chamada ao AuthService para confirmar que o token não foi revogado etc.
             Boolean isValid = webClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/api/auth/validate-token")

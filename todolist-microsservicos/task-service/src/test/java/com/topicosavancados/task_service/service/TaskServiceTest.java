@@ -37,7 +37,7 @@ class TaskServiceTest {
                 "Task 1",
                 "Description",
                 LocalDate.now(),
-                TaskStatus.CONCLUIDO,
+                TaskStatus.COMPLETED,
                 "High",
                 username,
                 UUID.randomUUID()
@@ -60,7 +60,7 @@ class TaskServiceTest {
                 "Task 1",
                 "Description",
                 dueDate,
-                TaskStatus.PENDENTE,
+                TaskStatus.TODO,
                 "High",
                 username,
                 UUID.randomUUID()
@@ -81,7 +81,7 @@ class TaskServiceTest {
                 "New Task",
                 "Description",
                 LocalDate.now(),
-                TaskStatus.EM_ANDAMENTO,
+                TaskStatus.IN_PROGRESS,
                 "High",
                 null,
                 null
@@ -109,7 +109,7 @@ class TaskServiceTest {
                 "Old Task",
                 "Description",
                 LocalDate.now(),
-                TaskStatus.EM_ANDAMENTO,
+                TaskStatus.IN_PROGRESS,
                 "Medium",
                 "user1",
                 UUID.randomUUID()
@@ -119,7 +119,7 @@ class TaskServiceTest {
                 "Updated Task",
                 "Updated Description",
                 LocalDate.now(),
-                TaskStatus.CONCLUIDO,
+                TaskStatus.COMPLETED,
                 "High",
                 "user1",
                 UUID.randomUUID()
@@ -132,7 +132,7 @@ class TaskServiceTest {
 
         assertNotNull(result);
         assertEquals("Updated Task", result.getTitle());
-        assertEquals(TaskStatus.CONCLUIDO, result.getStatus());
+        assertEquals(TaskStatus.COMPLETED, result.getStatus());
         verify(taskRepository, times(1)).findById(taskId);
         verify(taskRepository, times(1)).save(existingTask);
     }
@@ -145,7 +145,7 @@ class TaskServiceTest {
                 "Updated Task",
                 "Updated Description",
                 LocalDate.now(),
-                TaskStatus.CONCLUIDO,
+                TaskStatus.COMPLETED,
                 "High",
                 "user1",
                 UUID.randomUUID()
@@ -168,6 +168,50 @@ class TaskServiceTest {
 
         assertDoesNotThrow(() -> taskService.deleteTask(taskId));
         verify(taskRepository, times(1)).deleteById(taskId);
+    }
+
+    @Test
+    void testGetTotalTasks() {
+        long expectedCount = 10L;
+        when(taskRepository.count()).thenReturn(expectedCount);
+
+        long result = taskService.getTotalTasks();
+
+        assertEquals(expectedCount, result);
+        verify(taskRepository, times(1)).count();
+    }
+
+    @Test
+    void testGetPendingTasks() {
+        long expectedCount = 5L;
+        when(taskRepository.countByStatus(TaskStatus.TODO)).thenReturn(expectedCount);
+
+        long result = taskService.getPendingTasks();
+
+        assertEquals(expectedCount, result);
+        verify(taskRepository, times(1)).countByStatus(TaskStatus.TODO);
+    }
+
+    @Test
+    void testGetInProgressTasks() {
+        long expectedCount = 3L;
+        when(taskRepository.countByStatus(TaskStatus.IN_PROGRESS)).thenReturn(expectedCount);
+
+        long result = taskService.getInProgressTasks();
+
+        assertEquals(expectedCount, result);
+        verify(taskRepository, times(1)).countByStatus(TaskStatus.IN_PROGRESS);
+    }
+
+    @Test
+    void testGetCompletedTasks() {
+        long expectedCount = 7L;
+        when(taskRepository.countByStatus(TaskStatus.COMPLETED)).thenReturn(expectedCount);
+
+        long result = taskService.getCompletedTasks();
+
+        assertEquals(expectedCount, result);
+        verify(taskRepository, times(1)).countByStatus(TaskStatus.COMPLETED);
     }
 
 }

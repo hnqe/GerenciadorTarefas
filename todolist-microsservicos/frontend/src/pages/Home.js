@@ -78,7 +78,7 @@ const Home = () => {
       <div className="container mt-4 flex-grow-1">
         {/* Título e Inspiração */}
         <div className="text-center mb-4">
-          <h2 className="fw-bold">Welcome, {username}!</h2>
+          <h2 className="fw-bold welcome-title">Welcome, {username}!</h2>
           
             {/* Botão para navegar para Tasks (maior) */}
             <button
@@ -87,7 +87,7 @@ const Home = () => {
             >
               GO TO TASKS
             </button>
-          <p className="lead mb-0 mt-3">Here's something to inspire you today:</p>
+          <p className="lead mb-0 mt-3 inspire-text">Here's something to inspire you today:</p>
         </div>
 
         {/* Card da Quote */}
@@ -135,7 +135,7 @@ const Home = () => {
         {/* Tarefas de hoje em "cartões coloridos" */}
         <div className="row justify-content-center">
           <div className="col-md-8">
-            <h3 className="mb-3">Your Tasks for Today</h3>
+            <h3 className="mb-3 tasks-today-title">Your Tasks for Today</h3>
             {sortedTasks.length > 0 ? (
               <div className="row row-cols-1 row-cols-md-2 g-3 mb-4">
                 {sortedTasks.map((task) => {

@@ -6,6 +6,8 @@ import com.topicosavancados.auth_service.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -37,5 +39,22 @@ public class UserService {
 
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
+    }
+
+    // Admin methods
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public long getTotalUsers() {
+        return userRepository.count();
+    }
+
+    public long getTotalAdmins() {
+        return userRepository.countByRole("ADMIN");
+    }
+
+    public long getTotalRegularUsers() {
+        return userRepository.countByRole("USER");
     }
 }

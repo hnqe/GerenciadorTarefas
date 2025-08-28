@@ -6,9 +6,11 @@ function TaskColumn({
   title, 
   columnKey, 
   tasks, 
+  icon,
   onEditTask, 
   onDeleteTask, 
   onDragStart, 
+  onDragEnd,
   onDragOver, 
   onDrop 
 }) {
@@ -29,23 +31,27 @@ function TaskColumn({
       onDrop={(e) => onDrop(e, columnKey)}
     >
       <div
-        className="p-3 border rounded"
+        className="p-3 border rounded kanban-column"
         style={{
           backgroundColor: style.background,
           borderColor: style.borderColor,
           minHeight: "500px",
         }}
       >
-        <h2 className="text-center">{title}</h2>
+        <h2 className="text-center column-title">
+          <i className={`bi ${icon} me-2`}></i>
+          {title}
+        </h2>
         <div style={{ marginTop: "1rem" }}>
           {filteredTasks.length === 0 && (
-            <p className="text-muted fst-italic">No tasks here</p>
+            <p className="empty-state">No tasks here</p>
           )}
           {filteredTasks.map((task) => (
             <div
               key={task.id}
               draggable
               onDragStart={(e) => onDragStart(e, task)}
+              onDragEnd={onDragEnd}
             >
               <TaskCard
                 task={task}

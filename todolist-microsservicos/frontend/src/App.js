@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
+import Pomodoro from "./pages/Pomodoro";
 import AdminDashboard from "./pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -37,6 +38,14 @@ const App = () => {
         element={
           <ProtectedRoute>
             <Tasks />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/pomodoro"
+        element={
+          <ProtectedRoute>
+            <Pomodoro />
           </ProtectedRoute>
         }
       />
