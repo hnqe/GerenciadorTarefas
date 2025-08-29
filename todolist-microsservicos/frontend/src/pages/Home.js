@@ -66,7 +66,7 @@ const Home = () => {
 
   // Cálculo de progresso (qtd concluídas vs total)
   const totalTasks = sortedTasks.length;
-  const doneTasks = sortedTasks.filter((t) => t.status === "CONCLUIDO").length;
+  const doneTasks = sortedTasks.filter((t) => t.status === "COMPLETED").length;
   const progressPercentage = totalTasks > 0
     ? Math.round((doneTasks / totalTasks) * 100)
     : 0;

@@ -338,15 +338,15 @@ p {
 }
 
 /* Status Colors - High Contrast */
-.task-pendente::before {
+.task-todo::before {
   background: var(--warning);
 }
 
-.task-em_andamento::before {
+.task-in_progress::before {
   background: var(--accent);
 }
 
-.task-concluido::before {
+.task-completed::before {
   background: var(--success);
 }
 

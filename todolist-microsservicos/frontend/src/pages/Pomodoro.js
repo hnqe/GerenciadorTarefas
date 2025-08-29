@@ -267,7 +267,7 @@ const Pomodoro = () => {
         updatedSession.taskId = selectedTasks[0];
         updatedSession.taskTitle = tasks[0]?.title;
 
-        // Tasks will be moved to EM_ANDAMENTO only when session starts
+        // Tasks will be moved to IN_PROGRESS only when session starts
 
       } else {
         // Remove task links if no tasks selected
