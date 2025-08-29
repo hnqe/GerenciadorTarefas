@@ -10,7 +10,11 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
-  const { token } = useContext(AuthContext);
+  const { token, isLoading } = useContext(AuthContext);
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
 
   return (
     <Routes>
