@@ -36,7 +36,7 @@ const Tasks = () => {
     title: "",
     description: "",
     dueDate: "",
-    status: "PENDENTE",
+    status: "TODO",
     priority: "LOW",
   });
   const [editTask, setEditTask] = useState(null);
@@ -153,7 +153,7 @@ const Tasks = () => {
         title: "",
         description: "",
         dueDate: "",
-        status: "PENDENTE",
+        status: "TODO",
         priority: "LOW",
       });
       closeBootstrapModal("addTaskModal");
@@ -264,9 +264,9 @@ const Tasks = () => {
       // Não precisa mais do fetchTasks() - estado já foi atualizado!
       
       const statusLabels = {
-        'PENDENTE': 'Pending',
-        'EM_ANDAMENTO': 'In Progress', 
-        'CONCLUIDO': 'Completed'
+        'TODO': 'Pending',
+        'IN_PROGRESS': 'In Progress', 
+        'COMPLETED': 'Completed'
       };
       
       console.log(`Task moved: ${taskToUpdate.title} to ${statusLabels[newStatus]}`);
@@ -286,29 +286,29 @@ const Tasks = () => {
   // Estatísticas das tarefas
   const taskStats = {
     total: tasks.length,
-    pending: tasks.filter(t => t.status === 'PENDENTE').length,
-    inProgress: tasks.filter(t => t.status === 'EM_ANDAMENTO').length,
-    completed: tasks.filter(t => t.status === 'CONCLUIDO').length
+    pending: tasks.filter(t => t.status === 'TODO').length,
+    inProgress: tasks.filter(t => t.status === 'IN_PROGRESS').length,
+    completed: tasks.filter(t => t.status === 'COMPLETED').length
   };
 
   // Colunas do Kanban
   const columns = [
     { 
-      value: "PENDENTE", 
+      value: "TODO", 
       label: "Pending", 
       color: "warning",
       icon: "bi-clock",
       count: taskStats.pending 
     },
     { 
-      value: "EM_ANDAMENTO", 
+      value: "IN_PROGRESS", 
       label: "In Progress", 
       color: "info",
       icon: "bi-arrow-repeat",
       count: taskStats.inProgress 
     },
     { 
-      value: "CONCLUIDO", 
+      value: "COMPLETED", 
       label: "Completed", 
       color: "success",
       icon: "bi-check-circle",

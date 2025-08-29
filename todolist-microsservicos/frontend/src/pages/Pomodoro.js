@@ -242,9 +242,9 @@ const Pomodoro = () => {
     setLoadingTasks(true);
     try {
       const response = await api.get("/tasks");
-      // Filter out completed tasks - only show PENDENTE and EM_ANDAMENTO
+      // Filter out completed tasks - only show TODO and IN_PROGRESS
       const activeTasks = (response.data || []).filter(task => 
-        task.status === "PENDENTE" || task.status === "EM_ANDAMENTO"
+        task.status === "TODO" || task.status === "IN_PROGRESS"
       );
       setAvailableTasks(activeTasks);
     } catch (error) {
@@ -321,10 +321,10 @@ const Pomodoro = () => {
       }
       
       
-      // Update task status to CONCLUIDO (send full task object)
+      // Update task status to COMPLETED (send full task object)
       const updatedTask = {
         ...currentTask,
-        status: "CONCLUIDO"
+        status: "COMPLETED"
       };
       
       const response = await api.put(`/tasks/edit/${taskId}`, updatedTask);
@@ -333,7 +333,7 @@ const Pomodoro = () => {
       const taskUpdateEvent = {
         type: 'TASK_COMPLETED',
         taskId: taskId,
-        newStatus: 'CONCLUIDO',
+        newStatus: 'COMPLETED',
         timestamp: Date.now()
       };
       
@@ -436,17 +436,17 @@ const Pomodoro = () => {
     
     setLoading(true);
     try {
-      // Move linked PENDING tasks to EM_ANDAMENTO when session starts
+      // Move linked TODO tasks to IN_PROGRESS when session starts
       if (currentSession.taskIds && currentSession.taskIds.length > 0) {
         const linkedTasks = availableTasks.filter(t => currentSession.taskIds.includes(t.id));
-        const pendingTasks = linkedTasks.filter(task => task.status === "PENDENTE");
+        const pendingTasks = linkedTasks.filter(task => task.status === "TODO");
         
         if (pendingTasks.length > 0) {
-          // Update each pending task to EM_ANDAMENTO
+          // Update each pending task to IN_PROGRESS
           const updatePromises = pendingTasks.map(async (task) => {
             const updatedTask = {
               ...task,
-              status: "EM_ANDAMENTO"
+              status: "IN_PROGRESS"
             };
             
             try {
@@ -456,7 +456,7 @@ const Pomodoro = () => {
               const taskUpdateEvent = {
                 type: 'TASK_STATUS_UPDATED',
                 taskId: task.id,
-                newStatus: 'EM_ANDAMENTO',
+                newStatus: 'IN_PROGRESS',
                 timestamp: Date.now()
               };
               

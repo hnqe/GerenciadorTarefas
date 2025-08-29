@@ -48,14 +48,14 @@ function EditTaskModal({ editTask, setEditTask, handleEditTask }) {
               />
               <select
                 className="form-select mb-3"
-                value={editTask?.status || "PENDENTE"}
+                value={editTask?.status || "TODO"}
                 onChange={(e) =>
                   setEditTask({ ...editTask, status: e.target.value })
                 }
               >
-                <option value="PENDENTE">Pending</option>
-                <option value="EM_ANDAMENTO">In Progress</option>
-                <option value="CONCLUIDO">Done</option>
+                <option value="TODO">Pending</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="COMPLETED">Done</option>
               </select>
               <select
                 className="form-select"
