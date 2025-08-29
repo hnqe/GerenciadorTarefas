@@ -362,33 +362,33 @@ p {
   letter-spacing: 0.5px;
 }
 
-.status-pendente {
+.status-todo {
   background: var(--warning);
   color: var(--text-inverse);
 }
 
-.status-em_andamento {
+.status-in_progress {
   background: var(--accent);
   color: var(--text-inverse);
 }
 
-.status-concluido {
+.status-completed {
   background: var(--success);
   color: var(--text-inverse);
 }
 
 /* Dynamic status badges */
-.status-badge.status-pendente {
+.status-badge.status-todo {
   background: var(--warning);
   color: var(--text-inverse);
 }
 
-.status-badge.status-em_andamento {
+.status-badge.status-in_progress {
   background: var(--accent);
   color: var(--text-inverse);
 }
 
-.status-badge.status-concluido {
+.status-badge.status-completed {
   background: var(--success);
   color: var(--text-inverse);
 }
