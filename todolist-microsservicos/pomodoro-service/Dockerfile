@@ -1,5 +1,5 @@
 # Use Maven image instead of just OpenJDK
-FROM maven:3.8.6-openjdk-17-slim
+FROM maven:3.9.4-eclipse-temurin-17
 
 # Set working directory
 WORKDIR /app
