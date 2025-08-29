@@ -1,19 +1,19 @@
 export const STATUS_MAP = {
-  PENDENTE: "Pending",
-  EM_ANDAMENTO: "In Progress",
-  CONCLUIDO: "Done",
+  TODO: "Pending",
+  IN_PROGRESS: "In Progress",
+  COMPLETED: "Done",
 };
 
 export const COLUMN_STYLES = {
-  PENDENTE: {
+  TODO: {
     background: "#FFF8CD",
     borderColor: "#FFD400",
   },
-  EM_ANDAMENTO: {
+  IN_PROGRESS: {
     background: "#D1ECF1",
     borderColor: "#17A2B8",
   },
-  CONCLUIDO: {
+  COMPLETED: {
     background: "#D4EDDA",
     borderColor: "#28A745",
   },
